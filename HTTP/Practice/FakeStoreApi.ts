@@ -41,56 +41,48 @@ const Server = http.createServer(
             const productDetails = productendpoint.data;
 
             // 2. Download all the images of the products. and place into a folder.
-            const getallimages = async () => {
-              const productImages = productDetails;
-              for (const product of productImages) {
-                const idno = product.id;
-                const imageURL = product.image;
 
-                const avatarfilename = `${idno}.jpg`;
-                const avatarfolder = path.join(
-                  __dirname,
-                  "Product_Images",
-                  avatarfilename
-                );
+            // const productImages = productDetails;
+            // for (const product of productImages) {
+            //   const idno = product.id;
+            //   const imageURL = product.image;
 
-                const getavatarurl = await axios.get(imageURL, {
-                  responseType: "stream",
-                });
+            //   const avatarfilename = `${idno}.jpg`;
+            //   const avatarfolder = path.join(
+            //     __dirname,
+            //     "Product_Images",
+            //     avatarfilename
+            //   );
 
-                getavatarurl.data.pipe(fs.createWriteStream(avatarfolder));
-              }
-            };
+            //   const getavatarurl = await axios.get(imageURL, {
+            //     responseType: "stream",
+            //   });
+
+            //   getavatarurl.data.pipe(fs.createWriteStream(avatarfolder));
+            // }
 
             // 3. Save the title of each of the products in a "Txt File"
-            const getalltittles = async () => {
-              const productTittles = productDetails;
-              for (const product of productTittles) {
-                const idno = product.id;
-                const imageURL = product.title;
 
-                const avatarfilename = `productTittle${idno}.txt`;
-                const avatarfolder = path.join(
-                  __dirname,
-                  "Tittles",
-                  avatarfilename
-                );
+            const productTittles = productDetails;
+            for (const product of productTittles) {
+              const idno = product.id;
+              const imageURL = product.title;
 
-                const getavatarurl = await axios.get(imageURL, {
-                  responseType: "text",
-                });
+              const filename = `productTittle${idno}.txt`;
+              const avatarfolder = path.join(__dirname, "Tittles", filename);
 
-                getavatarurl.data.pipe(fs.createWriteStream(avatarfolder));
-              }
-            };
+              const getavatarurl = await axios.get(imageURL, {
+                responseType: "text",
+              });
+
+              getavatarurl.data.pipe(fs.createWriteStream(avatarfolder));
+            }
 
             status = 200;
 
             (response.message = `All ${productDetails.length} products gotten successfully`),
               (response.sucess = true),
               (response.data = productDetails);
-            getallimages();
-            getalltittles();
 
             res.write(JSON.stringify({ status, response }));
             res.end();
