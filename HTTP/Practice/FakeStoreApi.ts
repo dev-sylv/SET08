@@ -63,6 +63,26 @@ const Server = http.createServer(
             };
 
             // 3. Save the title of each of the products in a "Txt File"
+            const getalltittles = async () => {
+              const productTittles = productDetails;
+              for (const product of productTittles) {
+                const idno = product.id;
+                const imageURL = product.title;
+
+                const avatarfilename = `productTittle${idno}.txt`;
+                const avatarfolder = path.join(
+                  __dirname,
+                  "Tittles",
+                  avatarfilename
+                );
+
+                const getavatarurl = await axios.get(imageURL, {
+                  responseType: "text",
+                });
+
+                getavatarurl.data.pipe(fs.createWriteStream(avatarfolder));
+              }
+            };
 
             status = 200;
 
@@ -70,6 +90,7 @@ const Server = http.createServer(
               (response.sucess = true),
               (response.data = productDetails);
             getallimages();
+            getalltittles();
 
             res.write(JSON.stringify({ status, response }));
             res.end();
