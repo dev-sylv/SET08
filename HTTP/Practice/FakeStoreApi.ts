@@ -3,7 +3,7 @@ import http, { ServerResponse, IncomingMessage } from "http";
 import path from "path";
 import fs from "fs";
 
-const Port = 3400;
+const Port = 3700;
 
 interface IMessage {
   message: string;
@@ -41,19 +41,26 @@ const Server = http.createServer(
             const productDetails = productendpoint.data;
 
             // 2. Download all the images of the products. and place into a folder.
-            const productImages = productDetails.avatar_url;
-            const avatarfilename = `${productDetails.image}.jpg`;
-            const avatarfolder = path.join(
-              __dirname,
-              "Product_Images",
-              avatarfilename
-            );
+            const getallimages = async () => {
+              const productImages = productDetails;
+              for (const product of productImages) {
+                const idno = product.id;
+                const imageURL = product.image;
 
-            const getavatarurl = await axios.get(productImages, {
-              responseType: "stream",
-            });
+                const avatarfilename = `${idno}.jpg`;
+                const avatarfolder = path.join(
+                  __dirname,
+                  "Product_Images",
+                  avatarfilename
+                );
 
-            getavatarurl.data.pipe(fs.createWriteStream(avatarfolder));
+                const getavatarurl = await axios.get(imageURL, {
+                  responseType: "stream",
+                });
+
+                getavatarurl.data.pipe(fs.createWriteStream(avatarfolder));
+              }
+            };
 
             // 3. Save the title of each of the products in a "Txt File"
 
@@ -62,6 +69,7 @@ const Server = http.createServer(
             (response.message = `All ${productDetails.length} products gotten successfully`),
               (response.sucess = true),
               (response.data = productDetails);
+            getallimages();
 
             res.write(JSON.stringify({ status, response }));
             res.end();
@@ -87,7 +95,8 @@ const Server = http.createServer(
     } catch (error) {
       (response.message = "An error occured"),
         (response.sucess = false),
-        (response.data = error);
+        (response.data = null);
+      console.log(error);
 
       res.write(JSON.stringify({ status, response }));
       res.end();
@@ -96,5 +105,6 @@ const Server = http.createServer(
 );
 
 Server.listen(Port, () => {
+  console.log("");
   console.log("Server is running on port", Port);
 });
