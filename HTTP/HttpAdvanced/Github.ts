@@ -31,13 +31,12 @@ const server = http.createServer((req, res) => {
 
         if (response.status === 200) {
           const userDetails = response.data;
-
           // Download and save the user's avatar
           const avatarUrl = userDetails.avatar_url;
           const avatarFileName = `${username}_avatar.jpg`;
           const avatarFilePath = path.join(
             __dirname,
-            "Github-Avatars",
+            "Avatars",
             avatarFileName
           );
 
@@ -68,3 +67,8 @@ const server = http.createServer((req, res) => {
 server.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
 });
+
+// Assignment:
+// 1. Consume the api: https://fakestoreapi.com/products using axios.
+
+// Save all the product images in a folder with their name as filenames.
