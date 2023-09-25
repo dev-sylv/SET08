@@ -55,7 +55,7 @@ const Server = http.createServer(
       })
       .on("end", () => {
         //GET Method
-        if (url === "/home" && method === "GET") {
+        if (url === "/" && method === "GET") {
           Status = 200;
           response.message = "Successful";
           response.success = true;
@@ -172,6 +172,36 @@ const Server = http.createServer(
 
             resp.end();
           }
+        }
+        //Delete method
+        if (method === "DELETE") {
+          const Container: any = url?.split("/")[1];
+          let datavalue = parseInt(Container);
+
+          Data = Data.filter((el) => {
+            return el?.id !== datavalue;
+          });
+
+          response.message = "User deleted";
+          response.data = Data;
+          response.success = true;
+          resp.write(JSON.stringify({ response }));
+          resp.end();
+        }
+        // Get One User:
+        if (method === "GET") {
+          const Container: any = url?.split("/")[1];
+          let datavalue = parseInt(Container);
+
+          let test: any = Data.find((el: any) => {
+            return el.id === datavalue;
+          });
+
+          response.message = "Single User details gotten";
+          response.success = true;
+          response.data = test;
+          resp.write(JSON.stringify({ response }));
+          resp.end();
         }
       });
   }

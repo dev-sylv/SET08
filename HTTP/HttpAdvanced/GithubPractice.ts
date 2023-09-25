@@ -69,7 +69,7 @@ const server = http.createServer(
             avatarResponse.data.pipe(fs.createWriteStream(avatarFilePath));
 
             Status = 200;
-            response.message = `${username} Github Details Gotten Successfully`;
+            response.message = `${userDetails.name} Github Details Gotten Successfully`;
             response.success = true;
             response.data = userDetails;
             res.write(JSON.stringify({ response, Status }));
