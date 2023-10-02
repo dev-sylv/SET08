@@ -23,3 +23,25 @@ const db = [
     email: "nzube@gmail.com",
   },
 ];
+
+// DEFAULT GET:
+app.get("/", (req: Request, res: Response) => {
+  res.send("My first express server");
+});
+
+// Get:
+app.get("/get-all", (req: Request, res: Response) => {
+  res.send(db);
+});
+
+// Post:
+app.post("/add", (req: Request, res: Response) => {
+  let newuser = req.body;
+  db.push(newuser);
+  res.json(db);
+});
+
+app.listen(port, () => {
+  console.log("");
+  console.log("Server is listening on port", port);
+});
