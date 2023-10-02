@@ -1,10 +1,22 @@
-// server.ts
 import http, { IncomingMessage, ServerResponse } from "http";
 
 const PORT = process.env.PORT || 3000;
 
-// Dummy user data (replace with a database in a real application)
-const users: { username: string; password: string }[] = [];
+interface userData {
+  username: string;
+  password: string;
+}
+
+const users: userData[] = [
+  {
+    username: "Sylvia",
+    password: "1234567890",
+  },
+  {
+    username: "Esther",
+    password: "qwertyuiop",
+  },
+];
 
 // Create an HTTP server
 const server = http.createServer(
